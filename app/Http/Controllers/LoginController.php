@@ -4,8 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Hash;
 use Mail;
+use Session;
+use DB;
+use Carbon\Carbon;
 
 class LoginController extends Controller
 {
@@ -62,8 +67,8 @@ class LoginController extends Controller
     $student=User::where('email','=',$req->email)->first();
     if($student){
         if(Hash::check($req->password,$student->password)){
-            $req->session()->put('loginId',$student->id);
-            return redirect('dashboard');
+            $req->session()->put('student',$student);
+            return redirect('/dashboard');
         }else{
         return back()->with('fail','Password does not Matches!');
     }
@@ -77,4 +82,59 @@ class LoginController extends Controller
     public function dashboard(){
         return view('crud.dashboard');
     }
+
+    public function logout(){
+        if (Session::has('students')){
+            Session::pull('students');
+            return redirect('/login');
+        }
+    }
+
+    public function reset_password(){
+        return view('admin.reset');
+    }
+
+    public function reset_password_submit(Request $req){
+        $req->validate([
+            'email'=>'required|email|exists:users'
+        ]);
+
+        $token=Str::random(64);
+
+         DB::table('password_reset_tokens')->insert([
+            'email'=>$req->email,
+            'token'=>$token,
+            'created_at'=>Carbon::now()
+         ]);
+
+         Mail::send('admin.mailreset',['token'=>$token], function($message) use($req){
+            $message->to($req->email);
+            $message->subject('Reset Password');
+         });
+         return back()->with('success','We have mailed you,your password reset link');
+    }
+
+    public function reset_form($token){
+        return view('admin.resetform',['token'=>$token]);
+   }
+
+   public function reset_submit(Request $req){
+    $req->validate([
+        'email'=>'required|email|exists:users',
+        'password'=>'required|string|min:1|confirmed',
+        'password_confirmation'=>'required'
+    ]);
+
+    $updatePassword=DB::table('password_reset_tokens')->where([
+        'email'=>$req->email,
+        'token'=>$req->token
+    ])->first();
+
+    if(!$updatePassword){
+         return back()->with('fail','Something went wrong!');
+    }
+    $user=User::where('email',$req->email)->update(['password'=>Hash::make($req->password)]);
+    DB::table('password_reset_tokens')->where(['email'=>$req->email])->delete();
+    return redirect('/login')->with('success','Your Password has been changed!');
+}
 }

@@ -27,7 +27,8 @@
                     <div class="form-group mt-3">
                         <button class="btn btn-inline btn-primary" type="submit">Login</button>
                     </div><br>
-                    <a href="register">New User!! Register Here</a>
+                    <a href="register">New User!! Register Here</a><br>
+                    <a href="/reset-password">Froget Password!! Click Here to reset</a>
                 </form>
 </div>
 </div>

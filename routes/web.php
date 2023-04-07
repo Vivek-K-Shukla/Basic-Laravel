@@ -28,6 +28,12 @@ Route::post('/register-save',[LoginController::class,'register_save']);
 Route::get('/login',[LoginController::class,'login']);
 Route::post('/login-save',[LoginController::class,'login_save']);
 Route::get('/dashboard',[LoginController::class,'dashboard']);
+Route::get('/logout',[LoginController::class,'logout']);
+Route::get('/reset-password',[LoginController::class,'reset_password']);
+Route::post('/reset-password-submit',[LoginController::class,'reset_password_submit']);
+Route::get('/resetform/{token}',[LoginController::class,'reset_form']);
+Route::post('/resetsubmit',[LoginController::class,'reset_submit']);
+
 
 Route::get('/adduser',[CrudController::class,'add_user']);
 Route::post('/user-save',[CrudController::class,'user_save']);
