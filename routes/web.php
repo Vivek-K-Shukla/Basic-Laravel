@@ -33,6 +33,8 @@ Route::get('/reset-password',[LoginController::class,'reset_password']);
 Route::post('/reset-password-submit',[LoginController::class,'reset_password_submit']);
 Route::get('/resetform/{token}',[LoginController::class,'reset_form']);
 Route::post('/resetsubmit',[LoginController::class,'reset_submit']);
+Route::get('/changepassword',[LoginController::class,'change_password']);
+Route::post('/changepassword-submit',[LoginController::class,'changepassword_submit']);
 
 
 Route::get('/adduser',[CrudController::class,'add_user']);
@@ -41,3 +43,5 @@ Route::get('/dashboard',[CrudController::class,'dashboard']);
 Route::get('/delete/{id}',[CrudController::class,'delete_user']);
 Route::get('/edit/{id}',[CrudController::class,'edit_user']);
 Route::post('/update-user',[CrudController::class,'update_user']);
+Route::get('search',[CrudController::class,'search']);
+

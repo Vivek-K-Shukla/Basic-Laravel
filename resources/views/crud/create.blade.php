@@ -38,7 +38,7 @@
 
                     <div class="form-group">
                         <label for="message">Message:</label>
-                        <input type="text" name="message"  value="{{old('message')}}" class="form-control" placeholder="Enter Message">
+                        <textarea name="message" id="mysummernote" class="form-control" rows="4"></textarea>
                         <span class="text-danger">@error('message'){{$message}}@enderror</span>
                     </div>
 

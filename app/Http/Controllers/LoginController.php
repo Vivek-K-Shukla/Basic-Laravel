@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use Hash;
 use Mail;
 use Session;
 use DB;
-use Carbon\Carbon;
+use Auth;
+
 
 class LoginController extends Controller
 {
@@ -94,7 +96,9 @@ class LoginController extends Controller
         return view('admin.reset');
     }
 
+
     public function reset_password_submit(Request $req){
+
         $req->validate([
             'email'=>'required|email|exists:users'
         ]);
@@ -104,7 +108,7 @@ class LoginController extends Controller
          DB::table('password_reset_tokens')->insert([
             'email'=>$req->email,
             'token'=>$token,
-            'created_at'=>Carbon::now()
+            'created_at'=>Carbon::now(),
          ]);
 
          Mail::send('admin.mailreset',['token'=>$token], function($message) use($req){
@@ -118,6 +122,7 @@ class LoginController extends Controller
         return view('admin.resetform',['token'=>$token]);
    }
 
+
    public function reset_submit(Request $req){
     $req->validate([
         'email'=>'required|email|exists:users',
@@ -125,16 +130,42 @@ class LoginController extends Controller
         'password_confirmation'=>'required'
     ]);
 
-    $updatePassword=DB::table('password_reset_tokens')->where([
-        'email'=>$req->email,
-        'token'=>$req->token
-    ])->first();
+    $updatePassword=DB::table('password_reset_tokens')
+    ->where('email',$req->email)
+    ->where('token',$req->token)
+    ->first();
 
     if(!$updatePassword){
          return back()->with('fail','Something went wrong!');
     }
     $user=User::where('email',$req->email)->update(['password'=>Hash::make($req->password)]);
-    DB::table('password_reset_tokens')->where(['email'=>$req->email])->delete();
+
+    DB::table('password_reset_tokens')->where('email',$req->email)->delete();
     return redirect('/login')->with('success','Your Password has been changed!');
 }
+
+
+    public function change_password(){
+        return view('admin.changepassword');
+    }
+
+    public function changepassword_submit(Request $req){
+        $req->validate([
+            'password'=>['required','string','min:8'],
+            'newpassword'=>['required','string','min:8','confirmed'],
+        ]);
+        $currentuser=auth()->user();
+        dd($currentuser);
+        $currentpasswordstatus=Hash::check($req->password,auth()->user()->newpassword);
+        if($currentpasswordstatus){
+            User::findOrfail(Auth::user()->id)->update([
+                'name'=>$req->name,
+                'newpassword'=>Hash::make($req->newpassword),
+            ]);
+            return redirect()->back()->with('success','Password Updated Successfully!');
+        }
+        else{
+            return redirect()->back()->with('fail','Current Password doesn not match with old password!'); 
+        }
+    }
 }

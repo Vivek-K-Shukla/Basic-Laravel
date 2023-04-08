@@ -19,7 +19,7 @@ class CrudController extends Controller
             'email'=>'required|email|unique:cruds',
             'password'=>'required',
             'image'=>'required',
-            'message'=>'required|min:10|max:80'
+            'message'=>'required|min:10|max:100'
         ],
     [
         'name.required'=>"Username is required",
@@ -97,5 +97,15 @@ class CrudController extends Controller
         else{
             return back()->with('fail','Something Went Wrong!');
         }
-}
+        }
+
+    public function search(Request $req){
+        $member = Crud::where('name','like','%'.$req->input('query').'%')->get();
+        return view('crud.dashboard',['members'=>$member]);
+        if(!$member){
+            return back()->with('fail','Data Not Found!');
+
+        }
+        }
+
 }

@@ -34,7 +34,7 @@
                 </div>
                 <div class="form-group">
                         <label for="message">Message:</label>
-                        <input type="text" name="message"  value="{{$members['message']}}" class="form-control" placeholder="Enter Message">
+                        <textarea name="message" id="mysummernote" class="form-control" rows="4" placeholder="Enter Message">{{$members['message']}}</textarea>
                         <span class="text-danger">@error('message'){{$message}}@enderror</span>
                     </div>
                 <div class="form-group mb-3"></div>

@@ -28,7 +28,8 @@
         <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{Session::get('student')['name']}}
         <span class="caret"></span>
-          <li><a href="/logout">Logout</a></li></a>
+          <li><a href="/logout" class="btn btn-primary" style="color:white;margin-right:10px;">Logout</a></li>
+          <li><a href="/changepassword" class="btn btn-info text-white" style="color:white;" >Change Password</a></li></a>
       @else
       <li><a href="/login">Login</a></li>
       <li><a href="/register">Register</a></li>
