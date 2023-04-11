@@ -35,6 +35,11 @@
                     </div><br>
                     <a href="login">Already Registered!! Login Here</a>
                 </form>
+
+
+                <div style="height:100vh;" class="d-flex justify-content-center align-items-center">
+                <div><a href="{{route('googleRedirect')}}" class="btn google-button">Login With Google</a></div>
+                </div>
 </div>
 </div>
 </div>

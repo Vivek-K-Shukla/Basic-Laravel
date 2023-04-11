@@ -73,8 +73,8 @@ class LoginController extends Controller
             return redirect('/dashboard');
         }else{
         return back()->with('fail','Password does not Matches!');
+       }
     }
-}
     else{
         return back()->with('fail','The Email is not Registered!');
     }
@@ -86,8 +86,8 @@ class LoginController extends Controller
     }
 
     public function logout(){
-        if (Session::has('students')){
-            Session::pull('students');
+        if (Session::has('student')){
+            Session::pull('student');
             return redirect('/login');
         }
     }

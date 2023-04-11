@@ -12,6 +12,17 @@
 <!-- Summernote CSS Link -->
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<style>
+  .google-button{
+    background-color:red;
+    color:white;
+  }
+  .google-button:hover{
+    background-color:white;
+    border:1px solid red;
+    color:black;
+  }
+  </style>
   
     <title>Home Page</title>
 </head>

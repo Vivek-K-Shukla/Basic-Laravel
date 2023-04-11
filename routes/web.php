@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\CrudController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Auth\SocialAuthController;
+use App\Http\Controllers\EloquentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +29,7 @@ Route::get('/register',[LoginController::class,'register']);
 Route::post('/register-save',[LoginController::class,'register_save']);
 Route::get('/login',[LoginController::class,'login']);
 Route::post('/login-save',[LoginController::class,'login_save']);
-Route::get('/dashboard',[LoginController::class,'dashboard']);
+Route::get('/dashboard',[LoginController::class,'dashboard'])->middleware('custom_auth');
 Route::get('/logout',[LoginController::class,'logout']);
 Route::get('/reset-password',[LoginController::class,'reset_password']);
 Route::post('/reset-password-submit',[LoginController::class,'reset_password_submit']);
@@ -44,4 +46,11 @@ Route::get('/delete/{id}',[CrudController::class,'delete_user']);
 Route::get('/edit/{id}',[CrudController::class,'edit_user']);
 Route::post('/update-user',[CrudController::class,'update_user']);
 Route::get('search',[CrudController::class,'search']);
+
+
+Route::get('/auth/google/redirect',[SocialAuthController::class,'googleRedirect'])->name('googleRedirect');
+Route::get('/auth/google/callback',[SocialAuthController::class,'googleCallback'])->name('googleCallback');
+
+
+Route::get('/data',[EloquentController::class,'index']);
 
